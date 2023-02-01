@@ -1,22 +1,19 @@
 version: 2.1
 
-commands:
-  print_pipeline_id:
-    description: "Print the Pipeline ID"
-    parameters:
-      to:
-        type: string
-    steps:
-      - run: echo ${CIRCLE_WORKFLOW_ID}
-
 jobs:
-  print_pip_ID:
+  My_job:
     docker:
       - image: circleci/node:13.8.0
+    
     steps:
-      - print_pipeline_id
+      - run: return 1
+      - run: 
+          name: on error
+          command: echo "Hello, there is an error"
+          when: on_fail
 
+  
 workflows:
-  my_work_flow:
+  my_workFlow:
     jobs:
-      - print_pip_ID
+      - My_job
