@@ -1,42 +1,23 @@
 version: 2.1
 
+commands:
+  print_pipeline_id:
+    description: "Print the Pipeline ID"
+    parameters:
+      to:
+        type: string
+    steps:
+      - run: echo << parameters.to >>
+
 jobs:
-  save_hello_world_output:
+  print_pip_ID:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - run:
-          name: "Say Hello-World"
-          command: echo "Hello-World" > ~/output.txt
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: ~/
-          # Must be relative path from root
-          paths:
-            - output.txt
-  
-  print_output_file:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - attach_workspace:
-        # Must be absolute path or relative path from working_directory
-          at: ~/
-      - run: cat ~/output.txt
+      - print_pipeline_id:
+          to: ${CIRCLE_WORKFLOW_ID}
 
 workflows:
-  print-hello_world-workflow:
+  my_work_flow:
     jobs:
-      - save_hello_world_output
-      - print_output_file:
-          requires:
-            - save_hello_world_output
-
-# workflows:
-#   welcome:
-#     jobs:
-#       - print_hello
-#       - print_world:
-#           requires:
-#             - print_hello
+      - print_pip_ID
